@@ -1,0 +1,30 @@
+[
+    {
+        "caption": "Preferences",
+        "id": "preferences",
+        "children": [
+            {
+                "caption": "Package Settings",
+                "id": "package-settings",
+                "children": [
+                    {
+                        "caption": "OmniSharp",
+                        "id": "OmniSharp",
+                        "children": [
+                            {
+                                "command": "open_file",
+                                "args": {
+                                    "file": "${packages}/OmniSharpSublime/README.md"
+                                },
+                                "caption": "Readme"
+                            },
+                            {
+                                "caption": "-"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]
