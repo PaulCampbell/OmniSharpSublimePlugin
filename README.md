@@ -1,6 +1,6 @@
 OmniSharp Sublime Text 2 plugin
 ========================
-Experimental Sublime Text 2 plugin for [OmniSharp](https://github.com/nosami/Omnisharp_ c# intellisense for Sublime Text.
+Experimental Sublime Text 2 plugin for [OmniSharp](https://github.com/nosami/Omnisharp) c# intellisense for Sublime Text.
 
  * Drop the Plugin into the Sublime Text 2 Packages directory
 
