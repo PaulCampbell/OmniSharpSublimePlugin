@@ -1,11 +1,6 @@
-
-import sublime
-import sublime_plugin
-import os
-import urllib2, urllib, urlparse, json
+import urllib2, urllib, urlparse, json, os, sublime_plugin, sublime
 
 class OmniSharp(sublime_plugin.EventListener):
-    settings = None
     word_list = []
 
     def on_modified(self, view):
@@ -36,7 +31,6 @@ class OmniSharp(sublime_plugin.EventListener):
                 continue
 
         return autocomplete_list
-
 
 
     # gets called when auto-completion pops up.
