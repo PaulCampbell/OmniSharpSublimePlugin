@@ -9,20 +9,19 @@ class OmniSharp(sublime_plugin.EventListener):
     word_list = []
 
     def on_modified(self, view):
-		if self.should_trigger()
-			self.view = view
-			sublime.set_timeout(lambda: self.load_completions(view), 3)
+        self.view = view
+        sublime.set_timeout(lambda: self.load_completions(view), 3)
 
     def load_completions(self, view):
-        scope_name = view.scope_name(view.sel()[0].begin())       # sublime.windows()[0].active_view()
-        completions = self.get_response() 
-        print completions
-        for completion in completions:
-            self.word_list.append(completion['CompletionText'])
+        scope_name = view.scope_name(view.sel()[0].begin())  
+        if self.should_trigger(scope_name) : 
+            completions = self.get_response() 
+            print completions
+            for completion in completions:
+                self.word_list.append(completion['CompletionText'])
 
-	def should_trigger(self, scope):
-		print scope[:4]
-        if "text" == scope[:4]:
+    def should_trigger(self, scope):
+        if ".cs" in scope : 
             return True
         return False
        
