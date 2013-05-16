@@ -1,9 +1,11 @@
 OmniSharp Sublime Text 2 plugin
 ========================
-Experimental Sublime Text 2 plugin for OmniSharp. c# intellisense for Sublime Text.
+Experimental Sublime Text 2 plugin for [OmniSharp](https://github.com/nosami/Omnisharp_ c# intellisense for Sublime Text.
 
-Drop the Plugin into the Sublime Text 2 Packages directory
+ * Drop the Plugin into the Sublime Text 2 Packages directory
 
-Run OmniSharp as usual.
+ * Run OmniSharp as usual.
 
-Edit a c sharp file.
+ * Edit a c sharp file.
+
+Implemented so far: C# auto complete.
