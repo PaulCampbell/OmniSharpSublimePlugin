@@ -9,8 +9,9 @@ class OmniSharp(sublime_plugin.EventListener):
     word_list = []
 
     def on_modified(self, view):
-        self.view = view
-        sublime.set_timeout(lambda: self.load_completions(view), 3)
+		if self.should_trigger()
+			self.view = view
+			sublime.set_timeout(lambda: self.load_completions(view), 3)
 
     def load_completions(self, view):
         scope_name = view.scope_name(view.sel()[0].begin())       # sublime.windows()[0].active_view()
@@ -19,6 +20,11 @@ class OmniSharp(sublime_plugin.EventListener):
         for completion in completions:
             self.word_list.append(completion['CompletionText'])
 
+	def should_trigger(self, scope):
+		print scope[:4]
+        if "text" == scope[:4]:
+            return True
+        return False
        
 
     def get_autocomplete_list(self, word):
