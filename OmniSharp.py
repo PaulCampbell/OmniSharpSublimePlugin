@@ -1,14 +1,18 @@
 import urllib2, urllib, urlparse, json, os, sublime_plugin, sublime
 
 class OmniSharp(sublime_plugin.EventListener):
-    word_list = []
+    word_list = [] 
 
     def on_pre_save(self, view):
       self.view = view
-      if self.should_trigger(view.scope_name(view.sel()[0].begin())):
+      if self.is_dotnet_file(view.scope_name(view.sel()[0].begin())):
           js = self.get_response('/syntaxerrors')
-          if js != '':
+          if len(js['Errors']) > 0 :
+            view.set_status('message', 'Syntax errors.  View the console for details')
             print js['Errors']
+          else :
+            view.set_status('message', '')
+
 
     def on_modified(self, view):
         self.view = view
@@ -16,7 +20,7 @@ class OmniSharp(sublime_plugin.EventListener):
 
     def load_completions(self, view):
         scope_name = view.scope_name(view.sel()[0].begin())  
-        if self.should_trigger(scope_name) : 
+        if self.is_dotnet_file(scope_name) : 
             parameters = {}
             location = self.view.sel()[0]
             parameters['wordToComplete'] = self.view.substr(self.view.word(location.a))
@@ -25,7 +29,7 @@ class OmniSharp(sublime_plugin.EventListener):
             for completion in completions:
                 self.word_list.append(completion['CompletionText'])
 
-    def should_trigger(self, scope):
+    def is_dotnet_file(self, scope):
         return ".cs" in scope       
 
     def get_autocomplete_list(self, word):
