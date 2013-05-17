@@ -3,6 +3,13 @@ import urllib2, urllib, urlparse, json, os, sublime_plugin, sublime
 class OmniSharp(sublime_plugin.EventListener):
     word_list = []
 
+    def on_pre_save(self, view):
+      self.view = view
+      if self.should_trigger(view.scope_name(view.sel()[0].begin())):
+          js = self.get_response('/syntaxerrors')
+          if js != '':
+            print js['Errors']
+
     def on_modified(self, view):
         self.view = view
         sublime.set_timeout(lambda: self.load_completions(view), 3)
@@ -10,16 +17,16 @@ class OmniSharp(sublime_plugin.EventListener):
     def load_completions(self, view):
         scope_name = view.scope_name(view.sel()[0].begin())  
         if self.should_trigger(scope_name) : 
-            completions = self.get_response() 
-            print completions
+            parameters = {}
+            location = self.view.sel()[0]
+            parameters['wordToComplete'] = self.view.substr(self.view.word(location.a))
+            completions = self.get_response('/autocomplete', parameters) 
+            
             for completion in completions:
                 self.word_list.append(completion['CompletionText'])
 
     def should_trigger(self, scope):
-        if ".cs" in scope : 
-            return True
-        return False
-       
+        return ".cs" in scope       
 
     def get_autocomplete_list(self, word):
         autocomplete_list = []
@@ -32,23 +39,24 @@ class OmniSharp(sublime_plugin.EventListener):
 
         return autocomplete_list
 
-
     # gets called when auto-completion pops up.
     def on_query_completions(self, view, prefix, locations):
         scope_name = sublime.windows()[0].active_view().scope_name(sublime.windows()[0].active_view().sel()[0].begin())
         return self.get_autocomplete_list(prefix)
 
-    def get_response(self):
+    def get_response(self, endpoint, additionalParameters=None):
         parameters = {}
         location = self.view.sel()[0]
         cursor = self.view.rowcol(location.begin()) 
         parameters['line'] = cursor[0] + 1
         parameters['column'] = cursor[1] + 1
-        parameters['wordToComplete'] =  self.view.substr(self.view.word(location.a))
         parameters['buffer'] = '\r\n'.join(self.task_input()[:])
         parameters['filename'] = self.view.file_name()
 
-        target = 'http://localhost:2000/autocomplete'
+        if additionalParameters != None:
+          parameters.update(additionalParameters)
+
+        target =  urlparse.urljoin('http://localhost:2000/', endpoint)
         parameters = urllib.urlencode(parameters)
         response = urllib2.urlopen(target, parameters)
 
