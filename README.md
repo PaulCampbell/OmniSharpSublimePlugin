@@ -8,4 +8,9 @@ Experimental Sublime Text 2 plugin for [OmniSharp](https://github.com/nosami/Omn
 
  * Edit a c sharp file.
 
-Implemented so far: C# auto complete.
+Implemented so far: 
+
+ * C# auto complete.
+
+ * Syntax checking on save - print errors to console.
+
