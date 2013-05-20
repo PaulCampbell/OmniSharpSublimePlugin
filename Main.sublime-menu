@@ -1,27 +1,15 @@
 [
     {
-        "caption": "Preferences",
-        "id": "preferences", 
+        "caption": "OmniSharp",
+        "id": "OmniSharp", 
         "children": [
             {
-                "caption": "Package Settings",
-                "id": "package-settings",
-                "children": [
-                    {
-                        "caption": "OmniSharp",
-                        "id": "OmniSharp",
-                        "children": [
-                             {
-                                "command": "run_the_server",
-                                "args": {
-                                    "exe": "${packages}/OmniSharpSublime/bin/debug/OmniSharp.exe"
-                                },
-                                "caption": "Start OmniSharp"
-                            }
-                        ]
-                    }
-                ]
+                "command": "run_the_server",
+                "args": {
+                    "exe": "${packages}/OmniSharpSublime/bin/debug/OmniSharp.exe"
+                },
+                "caption": "Start OmniSharp"
             }
-        ] 
+    ] 
     }
 ] 
