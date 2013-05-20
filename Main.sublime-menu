@@ -1,7 +1,7 @@
 [
     {
         "caption": "Preferences",
-        "id": "preferences",
+        "id": "preferences", 
         "children": [
             {
                 "caption": "Package Settings",
@@ -11,20 +11,17 @@
                         "caption": "OmniSharp",
                         "id": "OmniSharp",
                         "children": [
-                            {
-                                "command": "open_file",
+                             {
+                                "command": "run_the_server",
                                 "args": {
-                                    "file": "${packages}/OmniSharpSublime/README.md"
+                                    "exe": "${packages}/OmniSharpSublime/bin/debug/OmniSharp.exe"
                                 },
-                                "caption": "Readme"
-                            },
-                            {
-                                "caption": "-"
+                                "caption": "Start OmniSharp"
                             }
                         ]
                     }
                 ]
             }
-        ]
+        ] 
     }
-]
+] 

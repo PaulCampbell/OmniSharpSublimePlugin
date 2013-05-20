@@ -1,16 +1,17 @@
-import urllib2, urllib, urlparse, json, os, sublime_plugin, sublime
+import urllib2, urllib, urlparse, json, os, sublime_plugin, sublime, subprocess
 
 class OmniSharp(sublime_plugin.EventListener):
     word_list = [] 
 
     def on_pre_save(self, view):
-      self.view = view
-      if self.is_dotnet_file(view.scope_name(view.sel()[0].begin())):
-          js = self.get_response('/syntaxerrors')
-          if len(js['Errors']) > 0 :
-            view.set_status('message', 'Syntax errors.  View the console for details')
-            print js['Errors']
-          else :
+        self.run_the_server(view)
+        self.view = view
+        if self.is_dotnet_file(view.scope_name(view.sel()[0].begin())):
+            js = self.get_response('/syntaxerrors')
+            if len(js['Errors']) > 0 :
+                view.set_status('message', 'Syntax errors.  View the console for details')
+                print js['Errors']
+        else :
             view.set_status('message', '')
 
 
@@ -68,7 +69,7 @@ class OmniSharp(sublime_plugin.EventListener):
 
         if(js != ''):
             return json.loads(js) 
-
+ 
     def task_input(self):
         selections = [region for region in self.view.sel() if not region.empty()]
         if len(selections) == 0:
@@ -78,3 +79,36 @@ class OmniSharp(sublime_plugin.EventListener):
 
         page_text = [self.view.substr(region).encode('utf-8') for region in self.regions]
         return page_text
+ 
+
+    def run_the_server(self, view) :
+        active_solution_file = self.get_active_solution_file(view.window())
+        if active_solution_file != '' : 
+            exe = "'" + sublime.packages_path() + "/OmniSharp/bin/Debug/OmniSharp.exe' -s "
+            print 'running: mono ' + exe + active_solution_file
+            subprocess.call('mono ' + exe + active_solution_file)
+
+
+    def get_active_solution_file(self, window):
+        """
+        Return the solution file the server should be run against.
+        Searches the folder in the Open Files pane for sln file.
+        """
+        folders = window.folders()
+        solution_files = []
+        if len(folders) == 1:
+            active_folder = folders[0]
+            for r,d,f in os.walk(active_folder):
+                for files in f:
+                    if files.endswith(".sln"):
+                        solution_files.append(os.path.join(r,files))
+        
+            if len(solution_files) == 0 :
+                sublime.error_message('No solution file found in Open Files.  Open a folder containing a .net solution')
+                return ''
+            if len(solution_files) > 1 :
+                sublime.error_message('More than one solution file found... need to deal with this!')
+                return ''
+            if len(solution_files) == 1 :
+                return solution_files[0]
+
